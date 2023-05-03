@@ -1,6 +1,11 @@
 {
+  "imports": {
+    "discordeno": "https://deno.land/x/discordeno@18.0.1/mod.ts",
+    "std/": "https://deno.land/std@0.185.0/",
+    "zod": "https://deno.land/x/zod@v3.21.4/index.ts"
+  },
   "tasks": {
-    "dev": "deno run -A --watch ./main.ts",
-    "start": "deno run -A --watch ./main.ts"
+    "dev": "deno run -A --unstable --watch ./main.ts",
+    "start": "deno run -A --unstable --watch ./main.ts"
   }
 }

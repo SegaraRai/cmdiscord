@@ -1,18 +1,17 @@
 import {
   ApplicationCommandOptionTypes,
   CreateSlashApplicationCommand,
-  Intents,
   InteractionResponseTypes,
   createBot,
   startBot,
-} from "https://deno.land/x/discordeno@18.0.1/mod.ts";
-import * as dotenv from "https://deno.land/std@0.185.0/dotenv/mod.ts";
-import * as flags from "https://deno.land/std@0.185.0/flags/mod.ts";
-import * as toml from "https://deno.land/std@0.185.0/toml/mod.ts";
-import * as yaml from "https://deno.land/std@0.185.0/yaml/mod.ts";
+} from "discordeno";
+import * as dotenv from "std/dotenv/mod.ts";
+import * as flags from "std/flags/mod.ts";
+import * as toml from "std/toml/mod.ts";
+import * as yaml from "std/yaml/mod.ts";
+import { z } from "zod";
 
 import { zCommand, zConfig } from "./schema.ts";
-import z from "https://deno.land/x/zod@v3.21.4/index.ts";
 import {
   formatCommand,
   formatOutput,
