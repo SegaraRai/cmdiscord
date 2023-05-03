@@ -1,0 +1,8 @@
+name: CMDiscord on Desktop
+env: dotenv
+commands:
+  - name: ls
+    command: bash -c "ls {path}"
+    options:
+      - name: path
+        default: .
