@@ -31,8 +31,9 @@ interface CommandData {
 
 const parsedArgs = flags.parse(Deno.args);
 if (parsedArgs.help) {
-  // TODO
-  console.log("Usage: deno run --allow-net --allow-env --allow-read main.ts");
+  console.log(
+    "Usage: deno run --allow-env --allow-net --allow-read --allow-run main.ts [--config <config file>] [--parser <parser>]"
+  );
   Deno.exit(0);
 }
 
@@ -41,11 +42,19 @@ if (parsedArgs.help) {
 const configFiles = parsedArgs.config
   ? [parsedArgs.config]
   : ["./cmdiscord.yaml", "./cmdiscord.yml", "./cmdiscord.toml"];
+const parsersFromArgs =
+  parsedArgs.parser === "yaml"
+    ? [yaml.parse]
+    : parsedArgs.parser === "toml"
+    ? [toml.parse]
+    : null;
 let rawConfig: unknown;
 for (const configFile of configFiles) {
-  const parsers = /\.toml/i.test(configFile)
-    ? [toml.parse, yaml.parse]
-    : [yaml.parse, toml.parse];
+  const parsers =
+    parsersFromArgs ||
+    (/\.toml/i.test(configFile)
+      ? [toml.parse, yaml.parse]
+      : [yaml.parse, toml.parse]);
   try {
     const text = await Deno.readTextFile(configFile);
     for (const parse of parsers) {
@@ -159,6 +168,7 @@ bot.events.interactionCreate = async (b, interaction) => {
     }
   );
 
+  // TODO: validate options
   const options = new Map(
     interaction.data.options?.map((option) => [
       option.name,
@@ -177,6 +187,8 @@ bot.events.interactionCreate = async (b, interaction) => {
     )
   );
   const strCommands = prettyArgs(commands);
+
+  // TODO: post `strCommands` to audit log channel
 
   let process: Deno.Process | undefined;
   let content: string | undefined;
@@ -233,3 +245,5 @@ await bot.helpers.upsertGuildApplicationCommands(
 );
 
 await startBot(bot);
+
+// TODO: post to audit log channel, try to delete message after a while, and if it succeeds, show error message and exit
